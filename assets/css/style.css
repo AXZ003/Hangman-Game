@@ -1,15 +1,25 @@
 body {
 
-    background-image: url("assets/images/harry.jpg")
-
+   
 
 }
 
+#catagoryName {
+
+margin-top: 10%;
+}
+
+.guess {
+
+  list-style-type: none;
+  display: inline;
+}
 
 .letter {
+    list-style: none;
     width: 30px;
     height: 30px;
-    border-style: solid;
+    border: solid 1px black;
     padding: 2px;
     float: left;
     margin: 2px;
@@ -31,7 +41,8 @@ body {
   }
 
   #buttons {
-    padding-top: 60px;
+    padding-top: 20px;
+    margin: 10px;
   }
 
   #clear {
@@ -40,4 +51,8 @@ body {
     color: black;
     border-style: solid;
     width: 100px;
+  }
+
+  .active {
+    background-color: lightblue;
   }
