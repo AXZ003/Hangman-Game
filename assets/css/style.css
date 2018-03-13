@@ -1,9 +1,21 @@
 body {
 
-   
+   background-repeat: no-repeat;
+   background-size: cover;
 
 }
 
+@font-face {
+  font-family: "partyhotter";
+  src: url("fonts/ParryHotter.ttf");
+  font-weight: normal;
+}
+
+h1 {
+
+  font-family: "partyhotter";
+
+}
 #catagoryName {
 
 margin-top: 10%;
@@ -55,4 +67,10 @@ margin-top: 10%;
 
   .active {
     background-color: lightblue;
+  }
+
+  #reset {
+    font-family: "partyhotter";
+
+
   }

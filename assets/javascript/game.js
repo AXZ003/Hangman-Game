@@ -2,9 +2,9 @@ var wins = 0;
 var losses = 0;
 var space = [];
 var activeItem;
-function gamePlay() {
-
-var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'];
+var categoryArray = [];
+var hangman = false;
+var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's','t', 'u', 'v', 'w', 'x', 'y', 'z'," "];
 // var places = ["the burrow", "malfoy manor", "shell cottage", "godrics hollow", "little hangleton"];
 // var characters = ["harry potter", "remus lupin", "molly weasly", "hermione granger", "voldemort"];
 // var magicalCreatures = ["dragon", "howler", "deluminator", "marauders map", "doxy"];
@@ -18,12 +18,21 @@ var counter;
 var list;
 
 var userGuess;             // Guess....   (guessed-letter)
-var guessedLetters = [];      // Stored geusses.... (used-letters)
+var guessedLetters = [];      // Stored guesses.... (used-letters)
 var guessesLeft = 10;             // Lives.... (guesses-left)
-var hiddenAnswer = alphabet[1];
 
-// Get Elements
 
+
+function gamePlay() {
+
+  hangman = true;
+  guessedLetters =[];
+  guessesLeft = 10;
+  space = [];
+  
+
+
+}
 
 var showCatagory = document.getElementById("scatagory");
 var showClue = document.getElementById("clue");
@@ -37,8 +46,11 @@ var buttons = function () {
 
     for (var i = 0; i < alphabet.length; i++) {
       list = document.createElement('li');
+      document.getElementById('hold').innerHTML = list;
       list.className = 'letter';
+      console.log(list.className = 'letter');
       list.innerHTML = alphabet[i];
+      console.log(list.innerHTML = alphabet[i]);
       check();
       myButtons.appendChild(letters);
       letters.appendChild(list);
@@ -46,31 +58,32 @@ var buttons = function () {
   };
 
 // Keys
-document.onkeyup = function(event) {
+// document.onkeyup = function(event) {
 
-    userGuess = event.key;
+//     userGuess = event.key.toLowerCase();
 
-    document.getElementById('guessed-letter').textContent = userGuess;
+//     document.getElementById('guessed-letter').textContent = userGuess;
 
-    if(guessedLetters.indexOf(userGuess) === -1) {
-        guessedLetters.push(userGuess);
-        if(userGuess === hiddenAnswer) {
-          wins++;
-          document.getElementById('won').textContent = wins;
-          gamePlay();
-        } else if (guessesLeft === 0) {
-          losses++;
-          document.getElementById('lost').textContent = losses;
-          gamePlay();
-        }  else {
+//     if(guessedLetters.indexOf(userGuess) === -1) {
+//         guessedLetters.push(userGuess);
+//         if(userGuess === hiddenWord) {
+//           wins++;
+//           document.getElementById('won').textContent = wins;
+//           gamePlay();
+//         } else if (guessesLeft === 0) {
+//           losses++;
+//           document.getElementById('lost').textContent = losses;
+//           gamePlay();
+//         }  else if (hiddenWord.indexOf(userGuess) < 0 && alphabet.indexOf(userGuess) >= 0 ) 
+//         {
+//           guessedLetters.push(userGuess);
+//           guessesLeft--;
+//           document.getElementById('used-letters').textContent = guessedLetters;
+//           document.getElementById('guesses-left').textContent = guessesLeft;
+//         }
+//       }
 
-          guessesLeft--;
-          document.getElementById('used-letters').textContent = guessedLetters;
-          document.getElementById('guesses-left').textContent = guessesLeft;
-        }
-      }
-
-    };
+//     };
 
 
 
@@ -94,21 +107,20 @@ var selectCat = function () {
 
     for (var i = 0; i < hiddenWord.length; i++) {
       correct.setAttribute('class', 'my-word');
-      userGuess = document.createElement('li');
-      userGuess.setAttribute('class', 'guess');
-      if (hiddenWord[i] === "-") {
-        userGuess.innerHTML = "-";
+      letter = document.createElement('li');
+      letter.setAttribute('class', 'guess');
+      if (hiddenWord[i] === " ") {
+        letter.innerHTML = " ";
+        space.push(" ");
 
       } else {
-        userGuess.innerHTML = "_";
+        letter.innerHTML = "_";
+        space.push("_")
       }
       wordHolder.appendChild(correct);
-      correct.appendChild(userGuess);
+      correct.appendChild(letter);
     }
   }
-
-
-
 
 
 
@@ -117,39 +129,68 @@ var check = function () {
     list.onclick = function () {
 
       var letter = this.textContent;
-      if(guessedLetters.indexOf(letter) == -1) {
-        if(activeItem != undefined) {
+      console.log(this.textContent);
+
+      if(guessedLetters.indexOf(letter) === -1) {
+        // guessedLetters.push(letter);
+
+        if(letter === hiddenWord) {
+          // wins++;
+          // document.getElementById('won').textContent=wins;
+          win();
+          gamePlay();
+        }  else if(guessesLeft === 0) {
+          // losses++;
+          // document.getElementById('lost').textContent=losses;
+          lose();
+          gamePlay();
+        }  else if (hiddenWord.indexOf(letter) < 0 && alphabet.indexOf(letter)>= 0) {
+
+        guessedLetters.push(letter);
+        guessesLeft--;
+        document.getElementById('guesses-left').textContent = guessesLeft;
+        document.getElementById('used-letters').textContent = guessedLetters;
+
+        } if(activeItem != undefined) {
           activeItem.classList = "letter";
         } else {
           activeItem
         }
         activeItem = this;
         activeItem.classList.add('active');
-        guessedLetters.push(letter);
+        // guessedLetters.push(letter);
         document.getElementById('guessed-letter').textContent = letter;
-        if(guessesLeft == 0) {
-          lose();
-        }
-        guessesLeft--;
-        document.getElementById('guesses-left').textContent = guessesLeft;
-        document.getElementById('used-letters').textContent = guessedLetters;
-        console.log(this);
-        var geuss = (this.innerHTML);
 
+       
+       
+        var guess = (this.innerHTML);
+       
         // this.onclick = null;
-
         for (var i = 0; i < hiddenWord.length; i++) {
-          if (hiddenWord[i] === geuss) {
-            space[i] = geuss;
+          if (hiddenWord[i] === guess) {
+            space[i] = guess;
           }
         }
         document.getElementById('hold').textContent = space.join(" ");
         if (space.join() === hiddenWord) {
           win();
-        }
+         }
       }
-    };
-  };
+    }
+  }
+
+  function gamePoints () {
+
+    if (hiddenWord === categoryArray.join(""))
+    wins++;
+    document.getElementById('wins').textContent = won;
+    hiddenWord[i+1];
+    categoryArray = [];
+    play();
+    gameReset();
+
+
+  }
 
 var lose = function() {
   losses++;
@@ -159,7 +200,7 @@ var lose = function() {
 
 var win = function() {
   wins++;
-  document.getElementById('wins').textContent = losses;
+  document.getElementById('wins').textContent = wins;
   play();
 };
 
@@ -175,12 +216,13 @@ var win = function() {
 
     chosenCategory = harryPotter[Math.floor(Math.random() * harryPotter.length)];
     hiddenWord = chosenCategory[Math.floor(Math.random() * chosenCategory.length)];
-    hiddenWord = hiddenWord.replace(/\s/g, "-");
+    hiddenWord = hiddenWord.replace(/\s/g," ");
     console.log(hiddenWord);
     
     for(var i = 0; i < hiddenWord.length; i++) {
       
-      space.push("-");
+      space.push("_");
+      console.log(space)
 
     };
 
@@ -192,30 +234,52 @@ var win = function() {
     buttons();
 
     guessedLetters = [ ];
-    // guessesLeft = 10;
-    // wins = 0;
+    guessesLeft = 10;
+    wins = 0;
 
     result();
-    // comments();
     selectCat();
 
   }
 
   play();
+  // gamePlay();
+
 
 
 
 
 // Reset
-  document.getElementById('reset').onclick = function() {
-    correct.parentNode.removeChild(correct);
-    letters.parentNode.removeChild(letters);
-    showClue.innerHTML = "";
-    context.clearRect(0, 0, 400, 400);
-    play();
+
+function gameReset () {
+
+
+  hangman = true;
+  guessedLetters =[];
+  guessesLeft = 10;
+  space = [];
+
+
+  function onclick() {
+  document.getElementById('reset').reset();
+  gamePlay()
+
   }
+  
+  // onclick = function() {
+  //   correct.parentNode.removeChild(correct);
+  //   letters.parentNode.removeChild(letters);
+  //   context.clearRect(0, 0, 400, 400);
+  //   play();
+  // }
+
 
 }
+  
+
+
+
+
 
 
 
